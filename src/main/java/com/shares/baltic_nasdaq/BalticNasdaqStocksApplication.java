@@ -1,4 +1,4 @@
-package com.example.balticnasdaqstocks;
+package com.shares.baltic_nasdaq;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

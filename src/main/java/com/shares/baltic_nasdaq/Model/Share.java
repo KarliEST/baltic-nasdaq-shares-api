@@ -1,6 +1,6 @@
-package com.example.balticnasdaqstocks.Model;
+package com.shares.baltic_nasdaq.Model;
 
-public class Stock {
+public class Share {
 	private String company;
 	private String ticker;
 	private Double lastPrice = 0.0;
@@ -11,9 +11,6 @@ public class Stock {
 	private int trades = 0;
 	private int volume = 0;
 	private Double turnover = 0.0;
-
-	public Stock() {
-	}
 
 	public String getCompany() {
 		return company;
@@ -97,7 +94,7 @@ public class Stock {
 
 	@Override
 	public String toString() {
-		return "Stock{" +
+		return "Share{" +
 				"company='" + company + '\'' +
 				", ticker='" + ticker + '\'' +
 				", lastPrice=" + lastPrice +

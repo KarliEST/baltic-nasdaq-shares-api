@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>baltic-nasdaq-stocks</artifactId>
+    <artifactId>baltic-nasdaq-shares</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>baltic-nasdaq-stocks</name>
-    <description>baltic-nasdaq-stocks</description>
+    <name>baltic-nasdaq-shares</name>
+    <description>baltic-nasdaq-shares</description>
     <properties>
         <java.version>17</java.version>
     </properties>

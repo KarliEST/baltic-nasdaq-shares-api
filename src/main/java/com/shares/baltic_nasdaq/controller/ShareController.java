@@ -1,7 +1,7 @@
-package com.example.balticnasdaqstocks.controller;
+package com.shares.baltic_nasdaq.controller;
 
-import com.example.balticnasdaqstocks.Model.Stock;
-import com.example.balticnasdaqstocks.service.NasdaqService;
+import com.shares.baltic_nasdaq.Model.Share;
+import com.shares.baltic_nasdaq.service.ShareService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
-public class Controller {
-	@Resource
-	private NasdaqService nasdaqService;
+public class ShareController {
 
+	@Resource
+	private ShareService shareService;
 
 	@GetMapping("/nasdaq")
-	public List<Stock> webClient() {
-		return nasdaqService.webClient();
+	public List<Share> convertNastaqResponse() {
+		return shareService.convertNastaqResponse();
 	}
 }
