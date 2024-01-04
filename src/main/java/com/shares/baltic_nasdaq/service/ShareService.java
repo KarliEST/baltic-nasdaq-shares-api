@@ -25,6 +25,7 @@ public class ShareService {
 		WebClient webClient = WebClient.create("https://nasdaqbaltic.com/statistics/en/shares?date=" + date);
 		Mono<String> response = webClient.get().retrieve().bodyToMono(String.class);
 		Document doc = Jsoup.parse(response.block(), "UTF-8");
+
 		List<Share> shares = new ArrayList<>();
 
 		Element content = doc.getElementById("shares_form");
@@ -36,46 +37,52 @@ public class ShareService {
 				continue;
 			}
 			Elements tds = row.getElementsByTag("td");
-			Share share = new Share();
-			share.setCompany(tds.get(0).select("a").first().text());
-			share.setTicker(tds.get(1).select("a").text());
-			if ((tds.get(2).text().trim().length() != 0)
-					&& !"-".equals(tds.get(2).text().trim())) {
-				share.setLastPrice(Double.valueOf(tds.get(2).text()));
-			}
-			if ((tds.get(3).text().trim().length() != 0)
-					&& !"-".equals(tds.get(3).text().trim())) {
-				share.setChange(Double.valueOf(tds.get(3).text()));
-			}
-			if (tds.get(4).text().trim().length() != 0
-					&& !"-".equals(tds.get(4).text().trim())) {
-				share.setPercentage(Double.valueOf(tds.get(4).text()));
-			}
-			if (tds.get(5).text().trim().length() != 0
-					&& !"-".equals(tds.get(5).text().trim())) {
-				share.setBid(Double.valueOf(tds.get(5).text()));
-			}
-			if (tds.get(6).text().trim().length() != 0
-					&& !"-".equals(tds.get(6).text().trim())) {
-				share.setAsk(Double.valueOf(tds.get(6).text()));
-			}
-			try {
-				share.setTrades(NumberFormat.getNumberInstance(Locale.US).parse(tds.get(7).text()).intValue());
-			} catch (ParseException e) {
-				throw new NumberFormatException();
-			}
-			try {
-				share.setVolume(NumberFormat.getNumberInstance(Locale.US).parse(tds.get(8).text()).intValue());
-			} catch (ParseException e) {
-				throw new NumberFormatException();
-			}
-			try {
-				share.setTurnover(NumberFormat.getNumberInstance(Locale.US).parse(tds.get(9).text()).doubleValue());
-			} catch (ParseException e) {
-				throw new NumberFormatException();
-			}
+			Share share = getShare(tds);
 			shares.add(share);
 		}
 		return shares;
+	}
+
+	private Share getShare(Elements tds) {
+		Share share = new Share();
+		share.setCompany(tds.get(0).select("a").first().text());
+		share.setTicker(tds.get(1).select("a").text());
+		share.setLastPrice(getTdValue(tds, 2));
+		share.setChange(getTdValue(tds, 3));
+		share.setPercentage(getTdValue(tds, 4));
+		share.setBid(getTdValue(tds, 5));
+		share.setAsk(getTdValue(tds, 6));
+		share.setTrades((int) getTdValue(tds, 7));
+		share.setVolume((int) getTdValue(tds, 8));
+		share.setTurnover(getTdValue(tds, 9));
+		return share;
+	}
+
+	private double getTdValue(Elements tds, int index) {
+		if (!isTdValueValid(tds, index)) {
+			return 0;
+		}
+		if (index == 7 || index == 8 || index == 9) {
+			return formatValueToLocaleDouble(tds, index);
+		} else return parseValueToDouble(tds, index);
+	}
+
+	private double parseValueToDouble(Elements tds, int index) {
+		return Double.parseDouble(tds.get(index).text());
+	}
+
+	private double formatValueToLocaleDouble(Elements tds, int index) {
+		double result;
+		try {
+			result = NumberFormat.getNumberInstance(Locale.US).parse(tds.get(index).text()).doubleValue();
+		} catch (ParseException e) {
+			throw new NumberFormatException();
+		}
+		return result;
+	}
+
+	private boolean isTdValueValid(Elements tds, int index) {
+		return (tds.get(index).text().trim().length() != 0)
+				&& !"-".equals(tds.get(index).text().trim());
 	}
 }
