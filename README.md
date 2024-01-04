@@ -9,6 +9,7 @@ Request is sent to Nasdaq Baltic website for shares data at current date. \
 Response, in HTML format, from the website is taken and share data is extracted from it. \
 Extracted data is converted to entities and a response in JSON format will be returned. \
 \
+*localhost API UI url - http://localhost:8080/swagger-ui/index.html* \
 NB! App relies on Nasdaq Baltic shares response's format remaining unchanged for it to work properly.
 ### JSON response:
 [\
